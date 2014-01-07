@@ -5,6 +5,8 @@ from pprint import pprint
 BASE_URL = "http://pyside.github.io/docs/pyside/PySide/QtGui/"
 url = BASE_URL + 'index.html'
 
+def p_tag_after_h1_tag(tag, elemento):
+    	return tag.previous_element is elemento 
 
 def get_toc(url):
 	response = requests.get(url)
@@ -26,15 +28,24 @@ def get_links(obj_index):
 
 	return obj_links
 
+def get_inherited(url):
+	
 
+	response = requests.get(url)
+	soup = bs4.BeautifulSoup(response.content)
+
+	strong_tag = soup.find_all('strong')
+	for strong in strong_tag:
+		print strong
 
 def main():
 	
 
-	obj_index = get_toc(url)
-	obj_links = get_links(obj_index)
+	# obj_index = get_toc(url)
+	# obj_links = get_links(obj_index)
 
-	pprint(obj_links)
+	# pprint(obj_links)
+	get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html")
 
 
 if __name__ == '__main__':
