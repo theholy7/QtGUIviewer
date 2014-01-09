@@ -54,16 +54,30 @@ def get_links(obj_index):
 
 	return obj_links
 
+#
+# Define function to get into the links of TOC and get inherited objects
+#
+
 def get_inherited(url):
+	inherited_obj_links = dict()
+
 	soup = make_soup(url)
-	
 
 	response = requests.get(url)
 	soup = bs4.BeautifulSoup(response.content)
+		print "children"
+		inherited_p_tag = strong_tag.find_next_siblings('a')
+		
+		for (i, link) in enumerate(inherited_p_tag):
+			print i, link.string, link['href']
+			inherited_obj_links[link.string] = BASE_URL + link['href']
+	
+	else:
+		print "no_children"
+		inherited_obj_links["no_children"] = "no_children"
 
-	strong_tag = soup.find_all('strong')
-	for strong in strong_tag:
-		print strong
+	return inherited_obj_links
+	
 
 def main():
 	
