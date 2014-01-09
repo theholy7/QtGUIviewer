@@ -8,13 +8,10 @@ from pprint import pprint
 BASE_URL = "http://pyside.github.io/docs/pyside/PySide/QtGui/"
 url = BASE_URL + 'index.html'
 
-def p_tag_after_h1_tag(tag, elemento):
-    	return tag.previous_element is elemento 
 #
 # Define a function to show progress on terminal
 #
 
-def get_toc(url):
 def update_progress(progress):
     import sys
     print "\r[{0}{1}] {2}%".format("#"*(progress/10)," "*(10-progress/10), progress),
@@ -27,7 +24,6 @@ def update_progress(progress):
 
 def make_soup(url):
 	response = requests.get(url)
-	
 	soup = bs4.BeautifulSoup(response.content)
 
 	return soup
@@ -43,14 +39,16 @@ def get_toc(url):
 
 	return obj_index
 
+#
+# Define function that gets links from the Table of Contents
+#
+
 def get_links(obj_index):
-	i=0
 	obj_links = dict()
 
-	for link in obj_index.find_all('a'):
+	for (i, link) in enumerate(obj_index.find_all('a')):
 		print i, link.string, link['href']
 		obj_links[link.string] = BASE_URL + link['href']
-		i+=1
 
 	return obj_links
 
@@ -63,8 +61,8 @@ def get_inherited(url):
 
 	soup = make_soup(url)
 
-	response = requests.get(url)
-	soup = bs4.BeautifulSoup(response.content)
+	strong_tag = soup.find('strong')
+	if strong_tag.text.lower() == 'inherited by:':
 		print "children"
 		inherited_p_tag = strong_tag.find_next_siblings('a')
 		
@@ -85,8 +83,16 @@ def main():
 	# obj_index = get_toc(url)
 	# obj_links = get_links(obj_index)
 
+	#num_links = len(obj_links.keys())
+	#for (i, obj_name) in enumerate(obj_links.keys()):
+	#	url = obj_links['obj_name']
+
+	for i in range(101):
+		time.sleep(1)
+		update_progress(i)
+
 	# pprint(obj_links)
-	get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html")
+	#get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html#qabstractbutton")
 
 
 if __name__ == '__main__':
