@@ -9,9 +9,19 @@ def p_tag_after_h1_tag(tag, elemento):
     	return tag.previous_element is elemento 
 
 def get_toc(url):
+
+
+#
+# Define function to get websites content
+#
+
+def make_soup(url):
 	response = requests.get(url)
 	
 	soup = bs4.BeautifulSoup(response.content)
+
+	return soup
+
 	
 	obj_index = soup.find("tr", "row-odd")
 
