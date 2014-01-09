@@ -32,6 +32,12 @@ def make_soup(url):
 
 	return soup
 
+#
+#  Define function to get Table of Contents
+#
+
+def get_toc(url):
+	soup = make_soup(url)
 	
 	obj_index = soup.find("tr", "row-odd")
 
@@ -49,6 +55,7 @@ def get_links(obj_index):
 	return obj_links
 
 def get_inherited(url):
+	soup = make_soup(url)
 	
 
 	response = requests.get(url)
