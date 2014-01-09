@@ -10,8 +10,15 @@ url = BASE_URL + 'index.html'
 
 def p_tag_after_h1_tag(tag, elemento):
     	return tag.previous_element is elemento 
+#
+# Define a function to show progress on terminal
+#
 
 def get_toc(url):
+def update_progress(progress):
+    import sys
+    print "\r[{0}{1}] {2}%".format("#"*(progress/10)," "*(10-progress/10), progress),
+    sys.stdout.flush()
 
 
 #
