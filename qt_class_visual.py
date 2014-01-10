@@ -12,9 +12,11 @@ url = BASE_URL + 'index.html'
 # Define a function to show progress on terminal
 #
 
-def update_progress(progress):
+def update_progress(progress, total):
     import sys
-    print "\r[{0}{1}] {2}%".format("#"*(progress/10)," "*(10-progress/10), progress),
+    total = float(total)
+    progress_percentage = (progress/total)*100.
+    print "\r[{0}{1}] {2:.2f}%".format("#"*(int(progress_percentage/10))," "*(int(10-progress_percentage/10)), progress_percentage),
     sys.stdout.flush()
 
 
