@@ -82,16 +82,16 @@ def get_inherited(url):
 def main():
 	
 
-	# obj_index = get_toc(url)
-	# obj_links = get_links(obj_index)
+	obj_index = get_toc(url)
+	obj_links = get_links(obj_index)
 
-	#num_links = len(obj_links.keys())
-	#for (i, obj_name) in enumerate(obj_links.keys()):
-	#	url = obj_links['obj_name']
-
-	for i in range(101):
-		time.sleep(1)
-		update_progress(i)
+	num_links = len(obj_links.keys())-1
+	for (i, obj_name) in enumerate(obj_links.keys()):
+		url_of_obj = obj_links[obj_name]
+		print url_of_obj
+		update_progress(i, num_links)
+		get_inherited(url_of_obj)
+		raw_input()
 
 	# pprint(obj_links)
 	#get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html#qabstractbutton")
