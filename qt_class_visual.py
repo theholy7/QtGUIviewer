@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import requests, bs4, re, time
+import requests, bs4, re, time, json
 from pprint import pprint
 
 # MAIN URL VARIABLES
@@ -12,7 +12,7 @@ url = BASE_URL + 'index.html'
 # Define a function to show progress on terminal
 #
 
-def update_progress(progress, total):
+def update_progress(progress, total=100.):
     import sys
     total = float(total)
     progress_percentage = (progress/total)*100.
@@ -65,16 +65,17 @@ def get_inherited(url):
 
 	strong_tag = soup.find('strong')
 	if strong_tag.text.lower() == 'inherited by:':
-		print "children"
+		#print "children"
+		inherited_obj_links["children"] = "TRUE"
 		inherited_p_tag = strong_tag.find_next_siblings('a')
 		
 		for (i, link) in enumerate(inherited_p_tag):
-			print i, link.string, link['href']
+			print i, link.string
 			inherited_obj_links[link.string] = BASE_URL + link['href']
 	
 	else:
-		print "no_children"
-		inherited_obj_links["no_children"] = "no_children"
+		#print "no_children"
+		inherited_obj_links["children"] = "FALSE"
 
 	return inherited_obj_links
 	
@@ -86,12 +87,24 @@ def main():
 	obj_links = get_links(obj_index)
 
 	num_links = len(obj_links.keys())-1
-	for (i, obj_name) in enumerate(obj_links.keys()):
-		url_of_obj = obj_links[obj_name]
-		print url_of_obj
 		update_progress(i, num_links)
-		get_inherited(url_of_obj)
-		raw_input()
+	with open("objects.txt", "w") as obj_file:
+		
+		for (i, obj_name) in enumerate(obj_links.keys()):
+			try:
+				url_of_obj = obj_links[obj_name]
+				print obj_name
+				obj_file.write(obj_name + "\n")
+
+				update_progress(i, num_links)
+				pprint(get_inherited(url_of_obj))
+
+				for obj_child in get_inherited(url_of_obj).keys():
+					obj_file.write(str(obj_child) + " ")
+
+				raw_input()
+			except KeyboardInterrupt:
+				break
 
 	# pprint(obj_links)
 	#get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html#qabstractbutton")
