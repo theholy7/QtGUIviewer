@@ -87,7 +87,6 @@ def main():
 	obj_links = get_links(obj_index)
 
 	num_links = len(obj_links.keys())-1
-		update_progress(i, num_links)
 	with open("objects.txt", "w") as obj_file:
 		
 		for (i, obj_name) in enumerate(obj_links.keys()):
