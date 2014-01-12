@@ -48,7 +48,7 @@ def get_links(obj_index):
 	obj_links = dict()
 
 	for (i, link) in enumerate(obj_index.find_all('a')):
-		print i, link.string, link['href']
+		#print i, link.string, link['href']
 		obj_links[link.string] = BASE_URL + link['href']
 
 	return obj_links
@@ -69,7 +69,7 @@ def get_inherited(url):
 		inherited_p_tag = strong_tag.find_next_siblings('a')
 		
 		for (i, link) in enumerate(inherited_p_tag):
-			print i, link.string
+			#print i, link.string
 			inherited_obj_links[link.string] = BASE_URL + link['href']
 	
 	else:
