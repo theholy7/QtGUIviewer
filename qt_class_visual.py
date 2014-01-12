@@ -63,18 +63,22 @@ def get_inherited(url):
 	soup = make_soup(url)
 
 	strong_tag = soup.find('strong')
-	if strong_tag.text.lower() == 'inherited by:':
-		#print "children"
-		inherited_obj_links["children"] = "TRUE"
-		inherited_p_tag = strong_tag.find_next_siblings('a')
+	try:
+		if strong_tag.text.lower() == 'inherited by:':
+			#print "children"
+			inherited_obj_links["children"] = "TRUE"
+			inherited_p_tag = strong_tag.find_next_siblings('a')
+			
+			for (i, link) in enumerate(inherited_p_tag):
+				#print i, link.string
+				inherited_obj_links[link.string] = BASE_URL + link['href']
 		
-		for (i, link) in enumerate(inherited_p_tag):
-			#print i, link.string
-			inherited_obj_links[link.string] = BASE_URL + link['href']
-	
-	else:
-		#print "no_children"
+		else:
+			#print "no_children"
+			inherited_obj_links["children"] = "FALSE"
+	except AttributeError:
 		inherited_obj_links["children"] = "FALSE"
+		pass
 
 	return inherited_obj_links
 	
@@ -94,7 +98,8 @@ def main():
 				dict_to_write = dict()
 				dict_to_write['object'] = obj_name
 				dict_to_write['children'] = list()
-
+				
+				#print obj_name
 				url_of_obj = obj_links[obj_name] # get url of object in TOC
 
 				dict_to_write['children'] = [x for x in get_inherited(url_of_obj).keys() if x != 'children'] #Add child objects
@@ -103,6 +108,7 @@ def main():
 
 				update_progress(i, num_links)
 				time.sleep(1)
+				#raw_input()
 			except KeyboardInterrupt:
 				break
 
