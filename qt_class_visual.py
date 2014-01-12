@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import requests, bs4, re, time, json
-from pprint import pprint
+import requests, bs4, time, json
 
 # MAIN URL VARIABLES
 BASE_URL = "http://pyside.github.io/docs/pyside/PySide/QtGui/"
@@ -87,21 +86,23 @@ def main():
 	obj_links = get_links(obj_index)
 
 	num_links = len(obj_links.keys())-1
-	with open("objects.txt", "w") as obj_file:
-		
+	
+	
+	with open('objects.txt', 'w+') as obj_file:	
 		for (i, obj_name) in enumerate(obj_links.keys()):
 			try:
-				url_of_obj = obj_links[obj_name]
-				print obj_name
-				obj_file.write(obj_name + "\n")
+				dict_to_write = dict()
+				dict_to_write['object'] = obj_name
+				dict_to_write['children'] = list()
+
+				url_of_obj = obj_links[obj_name] # get url of object in TOC
+
+				dict_to_write['children'] = [x for x in get_inherited(url_of_obj).keys() if x != 'children'] #Add child objects
+
+				json.dump(dict_to_write, obj_file, indent=4, separators=(',', ': '))
 
 				update_progress(i, num_links)
-				pprint(get_inherited(url_of_obj))
-
-				for obj_child in get_inherited(url_of_obj).keys():
-					obj_file.write(str(obj_child) + " ")
-
-				raw_input()
+				time.sleep(1)
 			except KeyboardInterrupt:
 				break
 
