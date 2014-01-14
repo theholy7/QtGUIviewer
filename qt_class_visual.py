@@ -18,7 +18,6 @@ def update_progress(progress, total=100.):
     print "\r[{0}{1}] {2:.2f}%".format("#"*(int(progress_percentage/10))," "*(int(10-progress_percentage/10)), progress_percentage),
     sys.stdout.flush()
 
-
 #
 # Define function to get websites content
 #
@@ -92,25 +91,28 @@ def main():
 	num_links = len(obj_links.keys())-1
 	
 	
-	with open('objects.txt', 'w+') as obj_file:	
-		for (i, obj_name) in enumerate(obj_links.keys()):
-			try:
-				dict_to_write = dict()
-				dict_to_write['object'] = obj_name
-				dict_to_write['children'] = list()
-				
-				#print obj_name
-				url_of_obj = obj_links[obj_name] # get url of object in TOC
+	
+	for (i, obj_name) in enumerate(obj_links.keys()):
+		try:
+			dict_to_write = dict()
+			dict_to_write['object'] = obj_name
+			dict_to_write['children'] = list()
+			
+			#print obj_name
+			url_of_obj = obj_links[obj_name] # get url of object in TOC
 
-				dict_to_write['children'] = [x for x in get_inherited(url_of_obj).keys() if x != 'children'] #Add child objects
+			dict_to_write['children'] = [x for x in get_inherited(url_of_obj).keys() if x != 'children'] #Add child objects
 
+			file_name = str(obj_name) + ".txt"
+			with open(file_name, 'w+') as obj_file:	
 				json.dump(dict_to_write, obj_file, indent=4, separators=(',', ': '))
 
-				update_progress(i, num_links)
-				time.sleep(1)
-				#raw_input()
-			except KeyboardInterrupt:
-				break
+
+			update_progress(i, num_links)
+			time.sleep(1)
+			#raw_input()
+		except KeyboardInterrupt:
+			break
 
 	# pprint(obj_links)
 	#get_inherited("http://pyside.github.io/docs/pyside/PySide/QtGui/QAbstractButton.html#qabstractbutton")
