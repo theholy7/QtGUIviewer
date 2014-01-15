@@ -13,6 +13,9 @@ def main():
 
 	path_txt_list = fnmatch.filter(path_file_list, '*.txt')
 
+	for txt_file in path_txt_list:
+		print txt_file
+
 
 if __name__ == '__main__':
     main()
