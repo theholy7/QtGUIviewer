@@ -1,5 +1,6 @@
 import os.path
 import fnmatch
+import json
 
 
 
@@ -13,8 +14,27 @@ def main():
 
 	path_txt_list = fnmatch.filter(path_file_list, '*.txt')
 
+	biggest_num_of_children = 0
+
 	for txt_file in path_txt_list:
 		print os.path.join(curr_path, txt_file)
+		try:
+			with open(txt_file, "r") as obj_file:
+				Qobject = json.load(obj_file)
+				print Qobject
+
+				num_of_children = len(Qobject['children'])
+
+				if num_of_children > biggest_num_of_children:
+					most_children = Qobject
+					biggest_num_of_children = num_of_children
+					print most_children
+
+
+
+			raw_input()
+		except KeyboardInterrupt:
+			break
 
 
 if __name__ == '__main__':
