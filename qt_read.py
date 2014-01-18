@@ -17,18 +17,19 @@ def main():
 	biggest_num_of_children = 0
 
 	for txt_file in path_txt_list:
-		print os.path.join(curr_path, txt_file)
+		#print os.path.join(curr_path, txt_file)
 		try:
 			with open(txt_file, "r") as obj_file:
 				Qobject = json.load(obj_file)
-				print Qobject
+				print Qobject['object'] + str(len(Qobject['children']))
 
 				num_of_children = len(Qobject['children'])
 
 				if num_of_children > biggest_num_of_children:
 					most_children = Qobject
 					biggest_num_of_children = num_of_children
-					print most_children
+				
+				print most_children['object'] + str(len(most_children['children']))
 
 
 
