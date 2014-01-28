@@ -4,7 +4,6 @@ import json
 
 
 
-
 def main():
 	curr_path = os.getcwd()
 
@@ -28,7 +27,7 @@ def main():
 				if num_of_children > biggest_num_of_children:
 					most_children = Qobject
 					biggest_num_of_children = num_of_children
-				
+
 				print most_children['object'] + str(len(most_children['children']))
 
 
